@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebAPI.DataContext;
+using WebAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,10 +40,18 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// this will pass the config to (DbContextOptions<ApplicationDbContext> options) : base(options)
 builder.Services.AddDbContext<CardSystemDataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("WebAPIDatabase"));
 });
+
+builder.Services.AddTransient<ICardRepository, CardRepository>();
+builder.Services.AddTransient<ICardContentRepository, CardContentRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+//Repository
+//builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
 

@@ -2,7 +2,7 @@
 
 namespace WebAPI.DataModel
 {
-    public class CardContent
+    public class CardContent : BaseDataModel
     {
         [Key]
         public int Id { get; set; }
